@@ -29,7 +29,7 @@ class Login extends React.Component {
                                 <div className="row">
                                     <div className="col-lg-12">
                                         <fieldset>
-                                            <FormGroup label="Email: *" htmlFor="exampleInputEmail1">
+                                            <FormGroup label="E-mail: *" htmlFor="exampleInputEmail1">
                                                 <input type="email" 
                                                         value={this.state.email}
                                                         onChange={e => this.setState({email: e.target.value})}
