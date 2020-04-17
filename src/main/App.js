@@ -1,6 +1,7 @@
 import React from 'react';
 
-import Rota from './rotas'
+import Rotas from './rotas'
+import NavBar from '../components/navbar'
 
 import 'bootswatch/dist/cerulean/bootstrap.css';
 import '../custom.css';
@@ -9,9 +10,12 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
-        <Rota />
-      </div>
+      <>
+        <NavBar />
+        <div className="container">
+          <Rotas />
+        </div>
+      </>
     )
   }
 }
