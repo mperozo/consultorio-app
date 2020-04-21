@@ -9,7 +9,18 @@ class Home extends React.Component {
     }
 
     componentDidMount() {
-        
+        const usuarioLogadoString = localStorage.getItem('_usuario_logado')
+        const usuarioLogado = JSON.parse(usuarioLogadoString)
+        this.setState({nome: usuarioLogado.nome})
+
+        /*
+        axios.get(`http://localhost:8080/api/usuario/${usuarioLogado.id}`)
+            .then( response => {
+                this.setState({nome: response.data.nome})
+            }).catch( error => {
+                console.log(error.response)
+            })
+        */
     }
 
     render() {
@@ -26,7 +37,7 @@ class Home extends React.Component {
                         <i className="fa fa-users"></i>
                             Cadastrar Usuário
                     </a>
-                    <a className="btn btn-danger btn-lg"
+                    <a className="btn btn-primary btn-lg"
                         href="#/atendimentos"
                         role="button">
                         <i className="fa fa-users"></i>
