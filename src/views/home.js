@@ -1,6 +1,6 @@
 import React from 'react'
 
-import axios from 'axios'
+import LocalStorageService from '../app/service/localstorageService'
 
 class Home extends React.Component {
 
@@ -9,18 +9,8 @@ class Home extends React.Component {
     }
 
     componentDidMount() {
-        const usuarioLogadoString = localStorage.getItem('_usuario_logado')
-        const usuarioLogado = JSON.parse(usuarioLogadoString)
+        const usuarioLogado = LocalStorageService.getItem('_usuario_logado')
         this.setState({nome: usuarioLogado.nome})
-
-        /*
-        axios.get(`http://localhost:8080/api/usuario/${usuarioLogado.id}`)
-            .then( response => {
-                this.setState({nome: response.data.nome})
-            }).catch( error => {
-                console.log(error.response)
-            })
-        */
     }
 
     render() {
