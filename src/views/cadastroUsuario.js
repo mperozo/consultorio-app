@@ -3,6 +3,9 @@ import React from 'react'
 import Card from '../components/card'
 import FormGroup from '../components/form-group'
 import {withRouter} from 'react-router-dom'
+import {mensagemSucesso, mensagemErro} from '../components/toastr'
+
+import UsuarioService from '../app/service/usuarioService'
 
 class CadastroUsuario extends React.Component {
 
@@ -10,11 +13,69 @@ class CadastroUsuario extends React.Component {
         nome: '',
         email: '',
         senha: '',
+        tipoUsuario:'',
         senhaRepeticao: ''
     }
 
+    constructor() {
+        super();
+        this.service = new UsuarioService();
+    }
+
+    validar = () => {
+        const msgs = []
+
+        if(!this.state.nome) {
+            msgs.push('Nome é obrigatório.')
+        }
+
+        if(!this.state.email) {
+            msgs.push('E-mail é obrigatório.')
+        }else if ( !this.state.email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/) ) {
+            msgs.push('Email inválido')
+        }
+
+        if(!this.state.senha || !this.state.senhaRepeticao) {
+            msgs.push('Senha é obrigatória.')
+        } else if (this.state.senha !== this.state.senhaRepeticao) {
+            msgs.push('As senhas devem ser iguais.')
+        }
+
+        if(!this.state.tipoUsuario) {
+            msgs.push('Tipo de usuário é obrigatório.')
+        }
+
+        return msgs;
+    }
+
     cadastrar = () => {
-        console.log(this.state);
+
+        //TODO colocar o campo na tela
+        this.setState({tipoUsuario : 'MEDICO'});
+
+        const msgs = this.validar();
+
+        if(msgs && msgs.length > 0) {
+            msgs.forEach( (msg, index) => {
+                mensagemErro(msg);
+            });
+            return false;
+        }
+
+        const usuario = {
+            nome: this.state.nome,
+            email: this.state.email,
+            senha: this.state.senha,
+            tipoUsuario: this.state.tipoUsuario
+        }
+
+        this.service.salvar(usuario)
+            .then( response => {
+                mensagemSucesso("Usuário cadastrado com sucesso!")
+                this.props.history.push('/login')
+            }).catch(error => {
+                mensagemErro(error.response.data)
+            })
     }
 
     cancelar = () => {
