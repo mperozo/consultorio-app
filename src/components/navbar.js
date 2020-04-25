@@ -22,8 +22,8 @@ function Navbar() {
                     id="navbarResponsive">
                     <ul className="navbar-nav">
                         <NavbarItem href="#/home" label="Home" />
-                        <NavbarItem href="#/atendimento" label="Atendimentos" />
-                        <NavbarItem href="#/cadastroUsuario" label="Usuários" />
+                        <NavbarItem href="#/consulta-atendimentos" label="Atendimentos" />
+                        <NavbarItem href="#/cadastro-usuario" label="Usuários" />
                         <NavbarItem href="#/login" label="Login" />
                     </ul>
                 </div>

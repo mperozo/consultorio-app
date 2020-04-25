@@ -22,13 +22,13 @@ class Home extends React.Component {
                 <p>E essa é sua área administrativa, utilize um dos menus ou botões abaixo para navegar pelo sistema.</p>
                 <p className="lead">
                     <a className="btn btn-primary btn-lg"
-                        href="#/cadastroUsuario"
+                        href="#/cadastro-usuario"
                         role="button">
                         <i className="fa fa-users"></i>
                             Cadastrar Usuário
                     </a>
                     <a className="btn btn-primary btn-lg"
-                        href="#/atendimentos"
+                        href="#/cadastro-atendimento"
                         role="button">
                         <i className="fa fa-users"></i>
                             Agendar Atendimento

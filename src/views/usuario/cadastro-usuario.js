@@ -1,11 +1,11 @@
 import React from 'react'
 
-import Card from '../components/card'
-import FormGroup from '../components/form-group'
+import Card from '../../components/card'
+import FormGroup from '../../components/form-group'
 import {withRouter} from 'react-router-dom'
-import {mensagemSucesso, mensagemErro} from '../components/toastr'
+import {mensagemSucesso, mensagemErro} from '../../components/toastr'
 
-import UsuarioService from '../app/service/usuarioService'
+import UsuarioService from '../../app/service/usuarioService'
 
 class CadastroUsuario extends React.Component {
 

@@ -33,7 +33,7 @@ class Login extends React.Component {
     }
 
     prepararCadastrar = () => {
-        this.props.history.push('/cadastroUsuario')
+        this.props.history.push('/cadastro-usuario')
     }
 
     render() {
