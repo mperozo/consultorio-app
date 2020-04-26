@@ -13,7 +13,7 @@ class CadastroUsuario extends React.Component {
         nome: '',
         email: '',
         senha: '',
-        tipoUsuario:'',
+        tipoUsuario:'MEDICO',
         senhaRepeticao: ''
     }
 
@@ -101,6 +101,31 @@ class CadastroUsuario extends React.Component {
                                         className="form-control"
                                         name="email"
                                         onChange={ e => this.setState({email: e.target.value}) }/>
+                            </FormGroup>
+                            <FormGroup label="Tipo: *" htmlFor="inputTipo">
+                                <div className="form-check">
+                                    <div className="custom-control custom-radio">
+                                        <input type="radio" 
+                                            id="customRadio1"
+                                            className="custom-control-input"
+                                            name="tipoUsuario"
+                                            value="MEDICO"
+                                            defaultChecked
+                                            checked={this.state.tipoUsuario === "MEDICO"}
+                                            onChange={ e => this.setState({tipoUsuario: e.target.value}) }/>
+                                        <label className="custom-control-label" for="customRadio1">Médico</label>
+                                    </div>
+                                    <div className="custom-control custom-radio">
+                                        <input type="radio" 
+                                            id="customRadio2"
+                                            className="custom-control-input"
+                                            name="tipoUsuario"
+                                            value="SECRETARIA"
+                                            checked={this.state.tipoUsuario === "SECRETARIA"}
+                                            onChange={ e => this.setState({tipoUsuario: e.target.value}) }/>
+                                        <label className="custom-control-label" for="customRadio2">Secretária</label>
+                                    </div>
+                                </div>
                             </FormGroup>
                             <FormGroup label="Senha: *" htmlFor="inputSenha">
                                 <input type="password" 
