@@ -24,6 +24,7 @@ function Navbar() {
                         <NavbarItem href="#/home" label="Home" />
                         <NavbarItem href="#/consulta-atendimentos" label="Atendimentos" />
                         <NavbarItem href="#/cadastro-usuario" label="Usuários" />
+                        <NavbarItem href="#/cadastro-paciente" label="Pacientes" />
                         <NavbarItem href="#/login" label="Login" />
                     </ul>
                 </div>
