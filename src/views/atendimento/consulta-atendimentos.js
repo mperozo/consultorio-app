@@ -5,26 +5,73 @@ import FormGroup from '../../components/form-group'
 import Combobox from '../../components/combobox'
 import AtendimentoTable from './atendimentoTable'
 
+import AtendimentoService from '../../app/service/atendimentoService'
+
 class ConsultaAtendimento extends React.Component {
+
+    state = {
+        idMedico: '',
+        idPaciente: '',
+        status: '',
+        statusDisponiveis: [],
+        medicosDisponiveis: [],
+        pacientesDisponiveis: [],
+        resultadoAtendimentos: []
+    }
+
+    constructor() {
+        super();
+        this.service = new AtendimentoService();
+    }
+
+    componentWillMount() {
+
+        this.service
+            .buscarStatusDisponiveis()
+            .then(resposta => {
+                this.setState({statusDisponiveis: resposta.data})
+            }).catch(error => {
+                //TODO colocar mensagem do toastr
+                console.log("ERRO");
+            })
+
+            // Obter a lista de medicos disponíveis e pacientes disponíveis
+    }
+
+    buscar = () => {
+
+        console.log(this.state.status);
+
+        const lancamentoFiltro = {
+            idMedico: this.state.idMedico,
+            idPaciente: this.state.idPaciente,
+            status: this.state.status
+        }
+
+        this.service
+        .buscar(lancamentoFiltro)
+        .then(resposta => {
+            this.setState({ resultadoAtendimentos: resposta.data })
+            console.log(this.state.resultadoAtendimentos);
+        }).catch(error => {
+            //TODO colocar mensagem do toastr
+            console.log("ERRO");
+        })
+    }
 
     render() {
 
-        const meses = [
+        const pacientes = [
             {label: '...', value: ''},
-            {label: 'Janeiro', value: '1'},
-            {label: 'Fevereiro', value: '2'},
-            {label: 'Março', value: '3'},
-            {label: 'Abril', value: '4'},
-            {label: 'Maio', value: '5'},
-            {label: 'Junho', value: '6'},
-            {label: 'Julho', value: '7'},
-            {label: 'Agosto', value: '8'},
-            {label: 'Setembro', value: '9'},
-            {label: 'Outubro', value: '10'},
-            {label: 'Novembro', value: '11'},
-            {label: 'Dezembro', value: '12'}
+            {label: 'Marcos Perozo', value: '1'},
+            {label: 'Bianca Fragoso', value: '2'}
         ]
 
+        const medicos = [
+            {label: '...', value: ''},
+            {label: 'Andrea Fragoso Perozo', value: '1'}
+        ]
+        
         const atendimentos = [
             {
                 id: 1,
@@ -47,17 +94,14 @@ class ConsultaAtendimento extends React.Component {
                  <div className="row">
                     <div className="col-md-12">
                         <div className="bs-component">
-                            <FormGroup label="Ano" htmlFor="inputAno">
-                                <input type="text" 
-                                        id="idInputAno"
-                                        className="form-control"
-                                        placeholder="Digite o ano"
-                                        name="ano" />
+                            <FormGroup label="Estado" htmlFor="inputStatus">
+                                <Combobox  id="inputStatus" 
+                                            className="form-control" 
+                                            lista={this.state.statusDisponiveis} 
+                                            value={this.state.status}
+                                            onChange={e => this.setState({status: e.target.value})} />
                             </FormGroup>
-                            <FormGroup label="Mês" htmlFor="inputMes">
-                                <Combobox  id="inputMes" className="form-control" lista={meses} />
-                            </FormGroup>
-                            <button onClick={this.consultar} type="button" className="btn btn-primary">Consultar</button>
+                            <button onClick={this.buscar} type="button" className="btn btn-primary">Consultar</button>
                             <button onClick={this.cadastrar} type="button" className="btn btn-secondary">Cadastrar</button>
                         </div>
                     </div>
@@ -68,7 +112,7 @@ class ConsultaAtendimento extends React.Component {
                 <div className="row">
                     <div className="col-md-12">
                         <div className="bs-component">
-                            <AtendimentoTable atendimentos={atendimentos}/>
+                            <AtendimentoTable atendimentos={this.state.resultadoAtendimentos}/>
                         </div>
                     </div>
                 </div>

@@ -5,10 +5,9 @@ export default props => {
     const rows = props.atendimentos.map( atendimento => {
         return (
             <tr key={atendimento.id}>
-                <td>{atendimento.paciente}</td>
-                <td>{atendimento.medico}</td>
-                <td>{atendimento.status}</td>
-                <td>{atendimento.data}</td>
+                <td>{atendimento.nomePaciente}</td>
+                <td>{atendimento.nomeMedico}</td>
+                <td>{atendimento.statusAtendimento}</td>
             </tr>
         )
     })
