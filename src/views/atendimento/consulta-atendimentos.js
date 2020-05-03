@@ -1,11 +1,17 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
+import {Dialog} from 'primereact/dialog';
+import {Button} from 'primereact/button';
+
+import * as messages from '../../components/toastr'
+
 import Card from '../../components/card'
 import FormGroup from '../../components/form-group'
 import Combobox from '../../components/combobox'
 import AtendimentoTable from './atendimentoTable'
 
 import AtendimentoService from '../../app/service/atendimentoService'
+
 
 class ConsultaAtendimento extends React.Component {
 
@@ -16,7 +22,9 @@ class ConsultaAtendimento extends React.Component {
         statusDisponiveis: [],
         medicosDisponiveis: [],
         pacientesDisponiveis: [],
-        resultadoAtendimentos: []
+        resultadoAtendimentos: [],
+        showConfirmDialog: false,
+        atendimentoADeletar: {}
     }
 
     constructor() {
@@ -25,23 +33,18 @@ class ConsultaAtendimento extends React.Component {
     }
 
     componentWillMount() {
-
         this.service
             .buscarStatusDisponiveis()
-            .then(resposta => {
-                this.setState({statusDisponiveis: resposta.data})
+            .then(response => {
+                this.setState({statusDisponiveis: response.data})
             }).catch(error => {
-                //TODO colocar mensagem do toastr
-                console.log("ERRO");
+                messages.mensagemErro(error.response.data)
             })
 
             // Obter a lista de medicos disponíveis e pacientes disponíveis
     }
 
     buscar = () => {
-
-        console.log(this.state.status);
-
         const lancamentoFiltro = {
             idMedico: this.state.idMedico,
             idPaciente: this.state.idPaciente,
@@ -49,45 +52,48 @@ class ConsultaAtendimento extends React.Component {
         }
 
         this.service
-        .buscar(lancamentoFiltro)
-        .then(resposta => {
-            this.setState({ resultadoAtendimentos: resposta.data })
-            console.log(this.state.resultadoAtendimentos);
-        }).catch(error => {
-            //TODO colocar mensagem do toastr
-            console.log("ERRO");
-        })
+            .buscar(lancamentoFiltro)
+            .then(response => {
+                this.setState({ resultadoAtendimentos: response.data })
+            }).catch(error => {
+                messages.mensagemErro(error.response.data)
+            })
+    }
+
+    editar = (id) => {
+        console.log('editando ', id);
+    }
+
+    exibirDialogConfirmarExclusao = ( atendimento ) => {
+        this.setState({ showConfirmDialog: true, atendimentoADeletar: atendimento })
+    }
+
+    fecharDialogConfirmarExclusao = () => {
+        this.setState({showConfirmDialog: false, atendimentoADeletar: {} })
+    }
+
+    deletar = () => {
+        this.service
+            .deletar(this.state.atendimentoADeletar.id)
+            .then(response => {
+                const atendimentos = this.state.resultadoAtendimentos;
+                const index = atendimentos.indexOf(this.state.atendimentoADeletar);
+                atendimentos.splice(index, 1);
+                this.setState( {atendimentos: atendimentos, showConfirmDialog: false} );
+                messages.mensagemSucesso('Atendimento deletado com sucesso!')
+            }).catch(error => {
+                messages.mensagemErro('Ocorreu um erro ao tentar deletar o lançamento: ' + error.response.data)
+            })
     }
 
     render() {
 
-        const pacientes = [
-            {label: '...', value: ''},
-            {label: 'Marcos Perozo', value: '1'},
-            {label: 'Bianca Fragoso', value: '2'}
-        ]
-
-        const medicos = [
-            {label: '...', value: ''},
-            {label: 'Andrea Fragoso Perozo', value: '1'}
-        ]
-        
-        const atendimentos = [
-            {
-                id: 1,
-                paciente: 'Marcos',
-                medico: 'Andrea',
-                status: 'Agendado',
-                data: '21/11/2022'
-            },
-            {
-                id: 2,
-                paciente: 'Bianca',
-                medico: 'Andrea',
-                status: 'Agendado',
-                data: '21/11/2022'
-            }
-        ]
+        const confirmDialogFooter = (
+            <div>
+                <Button label="Confirmar" icon="pi pi-check" onClick={this.deletar} className="p-button"/>
+                <Button label="Cancelar" icon="pi pi-times" onClick={this.fecharDialogConfirmarExclusao} className="p-button-secondary"/>
+            </div>
+        );
 
         return (
             <Card title="Atendimentos">
@@ -112,9 +118,21 @@ class ConsultaAtendimento extends React.Component {
                 <div className="row">
                     <div className="col-md-12">
                         <div className="bs-component">
-                            <AtendimentoTable atendimentos={this.state.resultadoAtendimentos}/>
+                            <AtendimentoTable atendimentos={this.state.resultadoAtendimentos} 
+                                              deleteAction={this.exibirDialogConfirmarExclusao} 
+                                              editAction={this.editar}/>
                         </div>
                     </div>
+                </div>
+                <div>
+                    <Dialog header="Confirmação" 
+                            visible={this.state.showConfirmDialog} 
+                            style={{width: '40vw'}} 
+                            footer={confirmDialogFooter}
+                            modal={true} 
+                            onHide={() => this.setState({showConfirmDialog: false})}>
+                        Tem certeza que deseja excluir o atendimento?
+                    </Dialog>
                 </div>
             </Card>
         )

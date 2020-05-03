@@ -13,6 +13,14 @@ class UsuarioService extends ApiService {
     salvar(usuario) {
         return this.post('/salvar', usuario)
     }
+
+    buscarMedicos() {
+        return this.post('/buscar-por-tipo?tipo=MEDICO')
+    }
+
+    buscarSecretarias() {
+        return this.post('/buscar-por-tipo?tipo=SECRETARIA')
+    }
 }
 
 export default UsuarioService

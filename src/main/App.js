@@ -9,6 +9,10 @@ import 'bootswatch/dist/cerulean/bootstrap.css';
 import '../custom.css';
 import 'toastr/build/toastr.min.css'
 
+import 'primereact/resources/themes/nova-light/theme.css'
+import 'primereact/resources/primereact.min.css'
+import 'primeicons/primeicons.css'
+
 class App extends React.Component {
 
   render() {

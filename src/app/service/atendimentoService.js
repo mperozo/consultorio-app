@@ -26,7 +26,10 @@ export default class AtendimentoService extends ApiService {
     }
 
     buscarStatusDisponiveis() {
+        return this.get('/status-disponiveis')
+    }
 
-        return this.get('/listar-status-disponiveis')
+    deletar(id) {
+        return this.delete(`/${id}`)
     }
 }
