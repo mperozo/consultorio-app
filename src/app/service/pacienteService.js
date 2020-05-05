@@ -9,6 +9,10 @@ class PacienteService extends ApiService {
     salvar(paciente) {
         return this.post('/salvar', paciente)
     }
+
+    buscarPacientes() {
+        return this.get('')
+    }
 }
 
 export default PacienteService

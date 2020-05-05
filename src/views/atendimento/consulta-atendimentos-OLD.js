@@ -2,18 +2,14 @@ import React from 'react'
 import { withRouter } from 'react-router-dom'
 import {Dialog} from 'primereact/dialog';
 import {Button} from 'primereact/button';
-
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import {AutoComplete} from 'primereact/autocomplete';
 
 import * as messages from '../../components/toastr'
 
 import Card from '../../components/card'
 import FormGroup from '../../components/form-group'
 import Combobox from '../../components/combobox'
-import Select from '../../components/select'
 import AtendimentoTable from './atendimentoTable'
-
 
 import AtendimentoService from '../../app/service/atendimentoService'
 import UsuarioService from '../../app/service/usuarioService'
@@ -47,6 +43,20 @@ class ConsultaAtendimento extends React.Component {
         this.montarComboboxStatus();
         this.montarAutocompleteMedico();
         this.montarAutocompletePaciente();
+    }
+
+    suggestMedicos(event) {
+        let results = this.state.medicosDisponiveis.filter((medico) => {
+            return medico.nome.toLowerCase().startsWith(event.query.toLowerCase());
+       });
+       this.setState({ medicoSuggestions: results });
+    }
+
+    suggestPacientes(event) {
+        let results = this.state.pacientesDisponiveis.filter((paciente) => {
+            return paciente.nome.toLowerCase().startsWith(event.query.toLowerCase());
+       });
+       this.setState({ pacienteSuggestions: results });
     }
 
     montarAutocompleteMedico() {
@@ -136,37 +146,32 @@ class ConsultaAtendimento extends React.Component {
                  <div className="row">
                     <div className="col-md-12">
                         <div className="bs-component">
-                            <FormGroup label="" htmlFor="autocomplete-medico">
-                                <Autocomplete
-                                    id="autocomplete-medico"
-                                    options={this.state.medicosDisponiveis}
-                                    getOptionLabel={(option) => option.nome}
-                                    style={{ width: 1000 }}
-                                    value={this.state.medicoSelecionado}
-                                    onChange={(e, newValue) => this.setState({medicoSelecionado: newValue})}
-                                    renderInput={(params) => <TextField {...params} label="Medico" variant="outlined" />}>
-                                </Autocomplete>
+                            <FormGroup label="Medico" htmlFor="inputMedico">
+                                <br></br>
+                                <AutoComplete id="inputMedico"
+                                              inputClassName="form-control"
+                                              field="nome"
+                                              value={this.state.medicoSelecionado} 
+                                              onChange={(e) => this.setState({medicoSelecionado: e.value})}
+                                              suggestions={this.state.medicoSuggestions} 
+                                              completeMethod={this.suggestMedicos.bind(this)} />
                             </FormGroup>
-                            <FormGroup label="" htmlFor="autocomplete-paciente">
-                                <Autocomplete
-                                    id="autocomplete-paciente"
-                                    options={this.state.pacientesDisponiveis}
-                                    getOptionLabel={(option) => option.nome}
-                                    style={{ width: 1000 }}
-                                    value={this.state.pacienteSelecionado}
-                                    onChange={(e, newValue) => this.setState({pacienteSelecionado: newValue})}
-                                    renderInput={(params) => <TextField {...params} label="Paciente" variant="outlined" />}>
-                                </Autocomplete>
+                            <FormGroup label="Paciente" htmlFor="inputPaciente">
+                                <br></br>
+                                <AutoComplete id="inputPaciente"
+                                              inputClassName="form-control"
+                                              field="nome"
+                                              value={this.state.pacienteSelecionado} 
+                                              onChange={(e) => this.setState({pacienteSelecionado: e.value})}
+                                              suggestions={this.state.pacienteSuggestions} 
+                                              completeMethod={this.suggestPacientes.bind(this)} />
                             </FormGroup>
-                            <FormGroup label="" htmlFor="idSelectEstado">
-                                <Select id="idSelectEstado"
-                                        inputLabel="Estado"
-                                        label="Estado"
-                                        style={{ width: 500 }}
-                                        lista={this.state.statusDisponiveis}
-                                        value={this.state.status}
-                                        onChange={e => this.setState({status: e.target.value})}>
-                                </Select>
+                            <FormGroup label="Estado" htmlFor="inputStatus">
+                                <Combobox  id="inputStatus" 
+                                            className="form-control" 
+                                            lista={this.state.statusDisponiveis} 
+                                            value={this.state.status}
+                                            onChange={e => this.setState({status: e.target.value})} />
                             </FormGroup>
                             <button onClick={this.buscar} type="button" className="btn btn-primary">Consultar</button>
                             <button onClick={this.cadastrar} type="button" className="btn btn-secondary">Cadastrar</button>

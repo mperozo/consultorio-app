@@ -1,3 +1,5 @@
+//Deprecated - Utilizar o select.js
+
 import React from 'react'
 
 //criando componente de função como arrow function
