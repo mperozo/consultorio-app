@@ -32,4 +32,8 @@ export default class AtendimentoService extends ApiService {
     deletar(id) {
         return this.delete(`/${id}`)
     }
+
+    salvar(atendimento) {
+        return this.post(`/salvar`, atendimento)
+    }
 }

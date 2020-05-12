@@ -10,7 +10,6 @@ import * as messages from '../../components/toastr'
 
 import Card from '../../components/card'
 import FormGroup from '../../components/form-group'
-import Combobox from '../../components/combobox'
 import Select from '../../components/select'
 import AtendimentoTable from './atendimentoTable'
 
@@ -30,11 +29,9 @@ class ConsultaAtendimento extends React.Component {
         atendimentoADeletar: {},
         //Autocomplete medico
         medicosDisponiveis : [],
-        medicoSuggestions: null,
         medicoSelecionado: null,
         //Autocomplete paciente
         pacientesDisponiveis : [],
-        pacienteSuggestions: null,
         pacienteSelecionado: null
     }
 
@@ -44,12 +41,12 @@ class ConsultaAtendimento extends React.Component {
         this.usuarioService = new UsuarioService();
         this.pacienteService = new PacienteService();
 
-        this.montarComboboxStatus();
-        this.montarAutocompleteMedico();
-        this.montarAutocompletePaciente();
+        this.carregarListaStatusDisponiveis();
+        this.carregarListaMedicosDisponiveis();
+        this.carregarListaPacientesDisponiveis();
     }
 
-    montarAutocompleteMedico() {
+    carregarListaMedicosDisponiveis() {
         this.usuarioService
             .buscarMedicos()
             .then(response => {
@@ -59,7 +56,7 @@ class ConsultaAtendimento extends React.Component {
             })
     }
 
-    montarAutocompletePaciente() {
+    carregarListaPacientesDisponiveis() {
         this.pacienteService
             .buscarPacientes()
             .then(response => {
@@ -69,7 +66,7 @@ class ConsultaAtendimento extends React.Component {
             })
     }
 
-    montarComboboxStatus() {
+    carregarListaStatusDisponiveis() {
         this.atendimentoService
             .buscarStatusDisponiveis()
             .then(response => {
@@ -138,7 +135,7 @@ class ConsultaAtendimento extends React.Component {
                         <div className="bs-component">
                             <FormGroup label="" htmlFor="autocomplete-medico">
                                 <Autocomplete
-                                    id="autocomplete-medico"
+                                    id="autocomplete-medico" 
                                     options={this.state.medicosDisponiveis}
                                     getOptionLabel={(option) => option.nome}
                                     style={{ width: 1000 }}
@@ -169,7 +166,7 @@ class ConsultaAtendimento extends React.Component {
                                 </Select>
                             </FormGroup>
                             <button onClick={this.buscar} type="button" className="btn btn-primary">Consultar</button>
-                            <button onClick={this.cadastrar} type="button" className="btn btn-secondary">Cadastrar</button>
+                            <button type="button" role="button" className="btn btn-secondary" href="#/cadastro-atendimentos">Cadastrar</button>
                         </div>
                     </div>
                 </div>

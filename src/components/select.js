@@ -15,7 +15,7 @@ export default (props) => {
     })
 
     return (
-        <div>
+        <div className="form-group">
             <FormControl variant="outlined">
                 <InputLabel>{props.inputLabel}</InputLabel>
                 <Select {...props}>
