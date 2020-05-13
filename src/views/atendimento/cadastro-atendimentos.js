@@ -21,6 +21,7 @@ import { withRouter } from 'react-router-dom'
 class CadastroAtendimentos extends React.Component {
 
     state = {
+        id: null,
         dataConsulta: new Date(),
         //Autocomplete medico
         medicosDisponiveis: [],
@@ -38,6 +39,34 @@ class CadastroAtendimentos extends React.Component {
 
         this.carregarListaMedicosDisponiveis();
         this.carregarListaPacientesDisponiveis();
+    }
+
+    componentDidMount() {
+        //Recebendo os parâmetros da URL da rota
+        const params = this.props.match.params;
+        if( params.id ) {
+            this.carregarCamposParaEdicaoDeAtendimento(params.id);
+        }
+    }
+
+    carregarCamposParaEdicaoDeAtendimento(idAtendimento) {
+        this.atendimentoService
+            .buscarPorId(idAtendimento)
+            .then(response => {
+                console.log(response.data)
+                this.setState({id: response.data.id, statusAtendimento: response.data.statusAtendimento});
+                this.carregarAutocompleteParaEdicao(response);
+            })
+            .catch(error => {
+                messages.mensagemErro(error.response.data);
+            })
+    }
+
+    carregarAutocompleteParaEdicao(response) {
+        const medicoPreviamenteSelecionado = this.state.medicosDisponiveis.find(medico => medico.id === response.data.idMedico);
+        this.setState({ medicoSelecionado: medicoPreviamenteSelecionado });
+        const pacientePreviamenteSelecionado = this.state.pacientesDisponiveis.find( paciente => paciente.id === response.data.idPaciente )
+        this.setState({pacienteSelecionado: pacientePreviamenteSelecionado});
     }
 
     carregarListaMedicosDisponiveis() {
@@ -60,10 +89,27 @@ class CadastroAtendimentos extends React.Component {
             })
     }
 
-    cadastrar =() => {
+    validar = () => {
+        const msgs = []
+        if (!this.state.medicoSelecionado) {
+            msgs.push('Médico é obrigatório.')
+        }
+        if (!this.state.pacienteSelecionado) {
+            msgs.push('Paciente é obrigatório.')
+        }
+        return msgs;
+    }
+
+    cadastrar = () => {
+        const msgs = this.validar();
+        if (msgs && msgs.length > 0) {
+            msgs.forEach((msg, index) => {
+                messages.mensagemErro(msg);
+            });
+            return false;
+        }
 
         const { medicoSelecionado, pacienteSelecionado } = this.state;
-
         const atendimento = { 
             idMedico: medicoSelecionado.id, 
             idPaciente: pacienteSelecionado.id
@@ -72,7 +118,27 @@ class CadastroAtendimentos extends React.Component {
         this.atendimentoService
             .salvar(atendimento)
             .then(response => {
+                this.props.history.push('/consulta-atendimentos')
                 messages.mensagemSucesso('Atendimento cadastrado com sucesso!')
+            }).catch(error => {
+                messages.mensagemErro(error.response.data)
+            })
+    }
+
+    atualizar = () => {
+        const {id, statusAtendimento, medicoSelecionado, pacienteSelecionado } = this.state;
+        const atendimento = { 
+            id,
+            statusAtendimento: statusAtendimento,
+            idMedico: medicoSelecionado.id, 
+            idPaciente: pacienteSelecionado.id
+         }
+
+        this.atendimentoService
+            .atualizar(atendimento)
+            .then(response => {
+                this.props.history.push('/consulta-atendimentos')
+                messages.mensagemSucesso('Atendimento atualizado com sucesso!')
             }).catch(error => {
                 messages.mensagemErro(error.response.data)
             })
@@ -122,7 +188,8 @@ class CadastroAtendimentos extends React.Component {
                     <div className="row">
                         <div className="col-md-6">
                             <button onClick={this.cadastrar} type="button" className="btn btn-primary">Salvar</button>
-                            <button onClick={this.cancelar} type="button" className="btn btn-secondary">Cancelar</button>
+                            <button onClick={this.atualizar} type="button" className="btn btn-primary">Atualizar</button>
+                            <button onClick={e => this.props.history.push('/consulta-atendimentos')} type="button" className="btn btn-secondary">Cancelar</button>
                         </div>
                     </div>
                 </div>

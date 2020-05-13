@@ -94,7 +94,7 @@ class ConsultaAtendimento extends React.Component {
     }
 
     editar = (id) => {
-        console.log('editando ', id);
+        this.props.history.push(`/cadastro-atendimentos/${id}`)
     }
 
     deletar = () => {
@@ -166,7 +166,12 @@ class ConsultaAtendimento extends React.Component {
                                 </Select>
                             </FormGroup>
                             <button onClick={this.buscar} type="button" className="btn btn-primary">Consultar</button>
-                            <button type="button" role="button" className="btn btn-secondary" href="#/cadastro-atendimentos">Cadastrar</button>
+                            <button onClick={e => this.props.history.push('/cadastro-atendimentos')} 
+                                    type="button" 
+                                    role="button" 
+                                    className="btn btn-secondary">
+                                        Cadastrar
+                            </button>
                         </div>
                     </div>
                 </div>

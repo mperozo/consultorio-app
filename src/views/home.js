@@ -28,10 +28,10 @@ class Home extends React.Component {
                             Cadastrar Usuário
                     </a>
                     <a className="btn btn-primary btn-lg"
-                        href="#/cadastro-atendimento"
+                        href="#/cadastro-atendimentos"
                         role="button">
                         <i className="fa fa-users"></i>
-                            Agendar Atendimento
+                            Cadastrar Atendimento
                     </a>
                 </p>
             </div>

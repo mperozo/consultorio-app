@@ -6,6 +6,10 @@ export default class AtendimentoService extends ApiService {
         super('/api/atendimentos')
     }
 
+    buscarPorId(id) {
+        return this.get(`/${id}`)
+    }
+
     buscar(atendimentoFiltro) {
         
         let params = `?`;
@@ -35,5 +39,9 @@ export default class AtendimentoService extends ApiService {
 
     salvar(atendimento) {
         return this.post(`/salvar`, atendimento)
+    }
+
+    atualizar(atendimento) {
+        return this.put(`/${atendimento.id}`, atendimento)
     }
 }
