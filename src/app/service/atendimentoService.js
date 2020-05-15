@@ -1,5 +1,7 @@
 import ApiService from '../apiService'
 
+import ErroValidacao from '../exception/erroValidacao'
+
 export default class AtendimentoService extends ApiService {
 
     constructor() {
@@ -43,5 +45,25 @@ export default class AtendimentoService extends ApiService {
 
     atualizar(atendimento) {
         return this.put(`/${atendimento.id}`, atendimento)
+    }
+
+    alterarStatus(id, status) {
+        return this.put(`/${id}/atualizar-status`, { status })
+    }
+
+    validar(atendimento) {
+        const erros = [];
+
+        if(!atendimento.idMedico) {
+            erros.push("Médico é obrigatório");
+        }
+
+        if(!atendimento.idPaciente) {
+            erros.push("Paciente é obrigatório");
+        }
+
+        if(erros && erros.length > 0) {
+            throw new ErroValidacao(erros)
+        }
     }
 }

@@ -20,6 +20,16 @@ export default props => {
                             onClick={e => props.deleteAction(atendimento)} >
                             Deletar
                     </button>
+                    <button type="button" 
+                            className="btn btn-success"
+                            onClick={e => props.alterarStatus(atendimento, 'REALIZADO')} >
+                            Concluir
+                    </button>
+                    <button type="button" 
+                            className="btn btn-primary"
+                            onClick={e => props.alterarStatus(atendimento, 'CANCELADO')} >
+                            Cancelar
+                    </button>
                 </td>
             </tr>
         )

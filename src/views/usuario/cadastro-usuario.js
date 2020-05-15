@@ -23,48 +23,17 @@ class CadastroUsuario extends React.Component {
         this.service = new UsuarioService();
     }
 
-    validar = () => {
-        const msgs = []
-
-        if (!this.state.nome) {
-            msgs.push('Nome é obrigatório.')
-        }
-
-        if (!this.state.email) {
-            msgs.push('E-mail é obrigatório.')
-        } else if (!this.state.email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
-            msgs.push('Email inválido')
-        }
-
-        if (!this.state.senha || !this.state.senhaRepeticao) {
-            msgs.push('Senha é obrigatória.')
-        } else if (this.state.senha !== this.state.senhaRepeticao) {
-            msgs.push('As senhas devem ser iguais.')
-        }
-
-        if (!this.state.tipoUsuario) {
-            msgs.push('Tipo de usuário é obrigatório.')
-        }
-
-        return msgs;
-    }
-
     cadastrar = () => {
+
+        const {nome, email, senha, senhaRepeticao, tipoUsuario} = this.state
+        const usuario = {nome, email, senha, senhaRepeticao, tipoUsuario}
         
-        const msgs = this.validar();
-
-        if (msgs && msgs.length > 0) {
-            msgs.forEach((msg, index) => {
-                mensagemErro(msg);
-            });
+        try {
+            this.service.validar(usuario);
+        }catch (erro) {
+            const msgs = erro.mensagens;
+            msgs.forEach(msg => mensagemErro(msg))
             return false;
-        }
-
-        const usuario = {
-            nome: this.state.nome,
-            email: this.state.email,
-            senha: this.state.senha,
-            tipoUsuario: this.state.tipoUsuario
         }
 
         this.service.salvar(usuario)

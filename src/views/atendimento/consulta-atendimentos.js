@@ -78,14 +78,14 @@ class ConsultaAtendimento extends React.Component {
 
     buscar = () => {
 
-        const lancamentoFiltro = {
+        const atendimentoFiltro = {
             idMedico: this.state.medicoSelecionado !== null ? this.state.medicoSelecionado.id : null,
             idPaciente: this.state.pacienteSelecionado !== null ? this.state.pacienteSelecionado.id : null,
             status: this.state.status
         }
 
         this.atendimentoService
-            .buscar(lancamentoFiltro)
+            .buscar(atendimentoFiltro)
             .then(response => {
                 this.setState({ resultadoAtendimentos: response.data })
             }).catch(error => {
@@ -107,7 +107,7 @@ class ConsultaAtendimento extends React.Component {
                 this.setState( {atendimentos: atendimentos, showConfirmDialog: false} );
                 messages.mensagemSucesso('Atendimento deletado com sucesso!')
             }).catch(error => {
-                messages.mensagemErro('Ocorreu um erro ao tentar deletar o lançamento: ' + error.response.data)
+                messages.mensagemErro('Ocorreu um erro ao tentar deletar o atendimento: ' + error.response.data)
             })
     }
 
@@ -117,6 +117,23 @@ class ConsultaAtendimento extends React.Component {
 
     fecharDialogConfirmarExclusao = () => {
         this.setState({showConfirmDialog: false, atendimentoADeletar: {} })
+    }
+
+    alterarStatus = (atendimento, status) => {
+        this.atendimentoService
+            .alterarStatus(atendimento.id, status)
+            .then( response => {
+                const atendimentos = this.state.resultadoAtendimentos;
+                const index = atendimentos.indexOf(atendimento);
+                if(index !== -1) {
+                    atendimento['statusAtendimento'] = status;
+                    atendimentos[index] = atendimento;
+                    this.setState( {atendimento} )
+                }
+                messages.mensagemSucesso('Status atualizado com sucesso!!')
+            }).catch(error => {
+                messages.mensagemErro('Ocorreu um erro ao tentar atualizar o status do atendimento: ' + error.response.data)
+            });
     }
 
     render() {
@@ -183,7 +200,8 @@ class ConsultaAtendimento extends React.Component {
                         <div className="bs-component">
                             <AtendimentoTable atendimentos={this.state.resultadoAtendimentos} 
                                               deleteAction={this.exibirDialogConfirmarExclusao} 
-                                              editAction={this.editar}/>
+                                              editAction={this.editar}
+                                              alterarStatus={this.alterarStatus} />
                         </div>
                     </div>
                 </div>
