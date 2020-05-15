@@ -188,12 +188,24 @@ class CadastroAtendimentos extends React.Component {
                         <div className="col-md-6">
                             {
                                 this.state.atualizandoAtendimento ? (
-                                    <button onClick={this.atualizar} type="button" className="btn btn-primary">Atualizar</button>
+                                    <button onClick={this.atualizar} 
+                                            type="button" 
+                                            className="btn btn-primary">
+                                            <i className="pi pi-save"></i> Atualizar
+                                    </button>
                                 ) : (
-                                    <button onClick={this.cadastrar} type="button" className="btn btn-primary">Salvar</button>
+                                    <button onClick={this.cadastrar} 
+                                            type="button" 
+                                            className="btn btn-primary">
+                                            <i className="pi pi-save"></i> Salvar
+                                    </button>
                                 )
                             }
-                            <button onClick={e => this.props.history.push('/consulta-atendimentos')} type="button" className="btn btn-secondary">Cancelar</button>
+                            <button onClick={e => this.props.history.push('/consulta-atendimentos')} 
+                                    type="button" 
+                                    className="btn btn-secondary">
+                                    <i className="pi pi-arrow-left"></i> Cancelar
+                            </button>
                         </div>
                     </div>
                 </div>

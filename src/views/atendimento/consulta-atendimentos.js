@@ -87,7 +87,11 @@ class ConsultaAtendimento extends React.Component {
         this.atendimentoService
             .buscar(atendimentoFiltro)
             .then(response => {
-                this.setState({ resultadoAtendimentos: response.data })
+                const lista = response.data;
+                if(lista.lenght < 1) {
+                    messages.mensagemAlerta("Nenhum resultado encontrado.");
+                }
+                this.setState({ resultadoAtendimentos: lista })
             }).catch(error => {
                 messages.mensagemErro(error.response.data)
             })
@@ -182,12 +186,16 @@ class ConsultaAtendimento extends React.Component {
                                         onChange={e => this.setState({status: e.target.value})}>
                                 </Select>
                             </FormGroup>
-                            <button onClick={this.buscar} type="button" className="btn btn-primary">Consultar</button>
+                            <button onClick={this.buscar} 
+                                    type="button" 
+                                    className="btn btn-primary">
+                                    <i className="pi pi-search"></i> Buscar
+                            </button>
                             <button onClick={e => this.props.history.push('/cadastro-atendimentos')} 
                                     type="button" 
                                     role="button" 
                                     className="btn btn-secondary">
-                                        Cadastrar
+                                    <i className="pi pi-plus"></i> Cadastrar
                             </button>
                         </div>
                     </div>

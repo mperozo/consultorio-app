@@ -69,8 +69,16 @@ class CadastroPaciente extends React.Component {
                                     name="nome"
                                     onChange={e => this.setState({ nome: e.target.value })} />
                             </FormGroup>
-                            <button onClick={this.cadastrar} type="button" className="btn btn-primary">Salvar</button>
-                            <button onClick={this.cancelar} type="button" className="btn btn-secondary">Cancelar</button>
+                            <button onClick={this.cadastrar} 
+                                    type="button" 
+                                    className="btn btn-primary">
+                                    <i className="pi pi-save"></i> Salvar
+                            </button>
+                            <button onClick={this.cancelar} 
+                                    type="button" 
+                                    className="btn btn-secondary">
+                                    <i className="pi pi-times"></i> Cancelar
+                            </button>
                         </div>
                     </div>
                 </div>
