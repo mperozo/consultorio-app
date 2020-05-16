@@ -7,18 +7,16 @@ import CadastroPaciente from '../views/paciente/cadastro-paciente'
 import ConsultaAtendimento from '../views/atendimento/consulta-atendimentos'
 import CadastroAtendimento from '../views/atendimento/cadastro-atendimentos'
 
-import { Route, Switch, HashRouter, Redirect } from 'react-router-dom'
+import AuthService from '../app/service/authService'
 
-const isUsuarioAutenticado = () => {
-    return true;
-}
+import { Route, Switch, HashRouter, Redirect } from 'react-router-dom'
 
 //Utilizando o destructor para obter o componente e também todas as propriedades passadas
 function RotaAutenticada( {component: Component, ...props}) {
     return (
         //Obtendo as propriedades passadas para o método e o componentProps (era pra ser props, mas já está sendo usado) passado (ex: Home)
         <Route {...props} render={ (componentProps) => {
-            if(isUsuarioAutenticado()) {
+            if(AuthService.isUsuarioAutenticado()) {
                 return (
                     // Se estiver autenticado, vai ter todas as propriedades passadas na Rota
                     <Component {... componentProps} />
