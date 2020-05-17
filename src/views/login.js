@@ -4,9 +4,10 @@ import FormGroup from '../components/form-group'
 import { withRouter } from 'react-router-dom'
 
 import UsuarioService from '../app/service/usuarioService'
-import LocalStorageService from '../app/service/localstorageService'
 
 import { mensagemErro } from '../components/toastr'
+//TIP: Como o AuthContext não está no export default, é necessário declará-lo assim no import
+import { AuthContext } from '../main/provedorAutenticacao'
 
 class Login extends React.Component {
 
@@ -25,7 +26,7 @@ class Login extends React.Component {
             email: this.state.email,
             senha: this.state.senha
         }).then(response => {
-            LocalStorageService.addItem('_usuario_logado', response.data)
+            this.context.iniciarSessao(response.data)
             this.props.history.push('/home')
         }).catch(erro => {
             mensagemErro(erro.response.data)
@@ -81,4 +82,8 @@ class Login extends React.Component {
         )
     }
 }
+
+//TIP: componente de class tem contextType. Ele receber o AuthContext é igual a ele fazer um subscribe e pode usar os métodos de AuthContext
+Login.contextType = AuthContext
+
 export default withRouter(Login)
