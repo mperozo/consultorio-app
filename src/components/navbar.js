@@ -13,7 +13,7 @@ function Navbar(props) {
                 <button className="navbar-toggler" 
                         type="button" 
                         data-toggle="collapse" 
-                        data-target="#navbarResponsive" 
+                        data-target="#navbarResponsive"
                         aria-controls="navbarResponsive" 
                         aria-expanded="false" 
                         aria-label="Toggle navigation">
@@ -22,7 +22,6 @@ function Navbar(props) {
                 <div className="collapse navbar-collapse" 
                     id="navbarResponsive">
                     <ul className="navbar-nav">
-                        <NavbarItem render={props.isUsuarioAutenticado} href="#/home" label="Home" />
                         <NavbarItem render={props.isUsuarioAutenticado} href="#/cadastro-usuario" label="Usuários" />
                         <NavbarItem render={props.isUsuarioAutenticado} href="#/consulta-atendimentos" label="Atendimentos" />
                         <NavbarItem render={props.isUsuarioAutenticado} href="#/cadastro-paciente" label="Pacientes" />
